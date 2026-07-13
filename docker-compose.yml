@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  localstack:
+    container_name: localstack-emulator
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3,lambda,apigateway,iam
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "./.localstack:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - shared_ai_net
+
+networks:
+  shared_ai_net:
+    name: shared_ai_net
+    external: true

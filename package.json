@@ -1,0 +1,33 @@
+{
+  "name": "aws-localstack-pipeline",
+  "version": "0.1.0",
+  "description": "LocalStack + Serverless Framework + GitHub Actions를 이용한 비용 0원 클라우드 배포 & 통합 테스트 자동화 파이프라인",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "test:unit": "vitest run tests/unit.test.ts",
+    "test:integration": "vitest run tests/integration.test.ts",
+    "test": "vitest run",
+    "deploy:local": "serverless deploy --stage local"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.726.0",
+    "@aws-sdk/client-api-gateway": "^3.726.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.147",
+    "@types/node": "^22.10.0",
+    "@biomejs/biome": "^1.9.4",
+    "serverless": "^3.39.0",
+    "serverless-localstack": "^1.2.2",
+    "serverless-plugin-typescript": "^2.1.5",
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "packageManager": "pnpm@9.15.0"
+}

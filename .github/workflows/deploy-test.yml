@@ -1,0 +1,73 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9.15.0
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Code Linting (Biome)
+        run: pnpm run lint
+
+      # LocalStack 에뮬레이터 가동 (Docker)
+      - name: Start LocalStack
+        run: |
+          docker compose up -d localstack
+          echo "Waiting for LocalStack to boot..."
+          
+          # LocalStack 헬스체크 대기 루프
+          for i in {1..30}; do
+            if curl -s http://localhost:4566/_localstack/health | grep -q '"s3": "available"'; then
+              echo "LocalStack S3 is ready!"
+              break
+            fi
+            sleep 2
+          done
+
+      - name: Run Unit Tests
+        run: pnpm run test:unit
+
+      # LocalStack 환경에 Serverless Framework 배포
+      - name: Deploy to LocalStack
+        run: pnpm run deploy:local
+
+      # 배포된 가상 AWS 리소스에 대한 통합 테스트 구동
+      - name: Run Integration Tests
+        run: pnpm run test:integration
+
+      - name: Stop LocalStack
+        if: always()
+        run: docker compose down
