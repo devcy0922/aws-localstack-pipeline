@@ -45,10 +45,10 @@
 
 ## 📁 주요 구성 파일 링크
 
-* [serverless.yml](file:///path/to/project/srv/aws-localstack-pipeline/serverless.yml): LocalStack 플러그인을 활용한 AWS 리소스 IaC 구성
-* [hello.ts](file:///path/to/project/srv/aws-localstack-pipeline/src/handlers/hello.ts): S3 SDK 연동 비즈니스 로직을 지닌 Lambda 핸들러
-* [deploy-test.yml](file:///path/to/project/srv/aws-localstack-pipeline/.github/workflows/deploy-test.yml): LocalStack 헬스체크 루프 및 통합 테스트를 자동화한 CI 워크플로우
-* [integration.test.ts](file:///path/to/project/srv/aws-localstack-pipeline/tests/integration.test.ts): 가상 리소스 상대로 E2E 연동성을 검증하는 통합 테스트
+* [serverless.yml](serverless.yml): LocalStack 플러그인을 활용한 AWS 리소스 IaC 구성
+* [hello.ts](src/handlers/hello.ts): S3 SDK 연동 비즈니스 로직을 지닌 Lambda 핸들러
+* [deploy-test.yml](.github/workflows/deploy-test.yml): LocalStack 헬스체크 루프 및 통합 테스트를 자동화한 CI 워크플로우
+* [integration.test.ts](tests/integration.test.ts): 가상 리소스 상대로 E2E 연동성을 검증하는 통합 테스트
 
 ---
 

@@ -4,3 +4,9 @@ dist/
 .localstack/
 .env
 *.log
+
+# 로컬 에이전트 지침
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+agents/
